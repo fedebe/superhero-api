@@ -22,9 +22,7 @@ public class SuperheroDAO {
         
     }
             
-    public SuperheroDAO(Long id, String name) {
-        super();
-        this.id = id;
+    public SuperheroDAO(String name) {
         this.name = name;
     }
 
