@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.api.superhero.domain.SuperheroDAO;
 import com.api.superhero.exception.SuperheroException;
 import com.api.superhero.model.Superhero;
+import com.api.superhero.model.SuperheroId;
 import com.api.superhero.repositories.SuperheroRepository;
 import com.api.superhero.service.SuperheroService;
 
@@ -23,14 +24,12 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public Superhero create(String name) throws SuperheroException {
-        SuperheroDAO superhero = new SuperheroDAO(name);
+    public Superhero create(Superhero superhero) throws SuperheroException {
+        SuperheroDAO superheroDao = maptoSuperheroDAO(superhero);
         
-        superhero = superheroRepository.save(superhero);
+        superheroDao = superheroRepository.save(superheroDao);
         
-        Superhero result = new Superhero(superhero.getId(), superhero.getName());
-       
-        return result;
+        return maptoSuperhero(superheroDao);
     }
 
     @Override
@@ -39,23 +38,17 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public void delete(Long superheroId) throws SuperheroException {
-        SuperheroDAO superhero = this.findSuperheroById(superheroId);
+    public void delete(SuperheroId superheroId) throws SuperheroException {
+        SuperheroDAO superhero = this.findSuperheroById(superheroId.id());
         
         superheroRepository.delete(superhero);
     }
-    
-    private SuperheroDAO findSuperheroById(Long superheroId) {
-        return superheroRepository.findById(superheroId).orElseThrow(() -> new SuperheroException());
-    }
 
     @Override
-    public Superhero get(Long superheroId) throws SuperheroException {
-        SuperheroDAO superhero = this.findSuperheroById(superheroId);        
+    public Superhero get(SuperheroId superheroId) throws SuperheroException {
+        SuperheroDAO superhero = this.findSuperheroById(superheroId.id());        
         
-        Superhero result = new Superhero(superhero.getId(), superhero.getName());
-        
-        return result;
+        return maptoSuperhero(superhero);
     }
 
     @Override
@@ -70,12 +63,24 @@ public class SuperheroServiceImpl implements SuperheroService {
         return this.getAllSuperheroes(() -> superheroRepository.findAllByNameContainingIgnoreCase(word));
     }
     
+    private SuperheroDAO findSuperheroById(Long superheroId) {
+        return superheroRepository.findById(superheroId).orElseThrow(() -> new SuperheroException());
+    }
+    
     private List<Superhero> getAllSuperheroes(Supplier<List<SuperheroDAO>> suplier) {
         List<SuperheroDAO> superheroes = suplier.get();
         
-        List<Superhero> results = superheroes.stream().map(sh -> new Superhero(sh.getId(), sh.getName())).toList();
+        List<Superhero> results = superheroes.stream().map(sh -> maptoSuperhero(sh)).toList();
         
         return results;
+    }
+    
+    private Superhero maptoSuperhero(SuperheroDAO superhero) {
+        return new Superhero(superhero.getId(), superhero.getName(), superhero.getSuperPowers());
+    }
+    
+    private SuperheroDAO maptoSuperheroDAO(Superhero superhero) {
+        return new SuperheroDAO(superhero.name(), superhero.superPowers());
     }
 
 }
