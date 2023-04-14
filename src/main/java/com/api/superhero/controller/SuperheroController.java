@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.superhero.advise.TrackExecutionTime;
 import com.api.superhero.documentation.SuperheroResources;
 import com.api.superhero.model.Superhero;
 import com.api.superhero.model.SuperheroId;
 import com.api.superhero.service.SuperheroService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -30,12 +33,13 @@ public class SuperheroController implements SuperheroResources {
     }
 
     @PostMapping("/superheroes")
-    public Superhero create(@RequestBody Superhero superhero) {
+    @TrackExecutionTime
+    public Superhero create(@RequestBody @Valid Superhero superhero) {
         return superheroService.create(superhero);
     }
 
     @PatchMapping("/superheroes/{superheroId}")
-    public Superhero update(@RequestBody Superhero superhero, @PathVariable("superheroId") SuperheroId superheroId) {
+    public Superhero update(@RequestBody @Valid Superhero superhero, @PathVariable("superheroId") SuperheroId superheroId) {
         return superheroService.update(superhero);
     }
 
