@@ -12,3 +12,4 @@ Superhero API permite realizar operaciones CRUD sobre superheroes.
 
 * Utiliza una base de datos H2 en memoria junto con Liquidbase para administrar las modificaciones que puedan surgir en la misma.
 
+* Dentro de la carpeta `resources` se encuentra la collection de postman con los request ya configurados.
