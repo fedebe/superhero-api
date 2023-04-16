@@ -4,6 +4,7 @@ WORKDIR /workspace/app
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
+COPY maven-versions-rules.xml .
 COPY src src
 
 RUN ./mvnw install -DskipTests

@@ -15,7 +15,7 @@ public class LongToSuperheroId implements Converter<String, SuperheroId> {
         try {
             return new SuperheroId(Long.valueOf(from));
         } catch (NumberFormatException e) {
-            throw new SuperheroException("Path variable must be a number.", BAD_REQUEST);
+            throw new SuperheroException(e, "Path variable must be a number.", BAD_REQUEST);
         }
     }
 }

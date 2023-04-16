@@ -30,13 +30,7 @@ public class SuperheroDAO {
     )
     private String[] superPowers;
 
-    public SuperheroDAO() {
-        
-    }
-            
-    public SuperheroDAO(String name) {
-        this.name = name;
-    }
+    public SuperheroDAO() { }
     
     public SuperheroDAO(String name, String[] superPowers) {
         this.name = name;
@@ -45,10 +39,6 @@ public class SuperheroDAO {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

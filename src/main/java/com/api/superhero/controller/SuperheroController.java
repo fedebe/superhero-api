@@ -1,5 +1,6 @@
 package com.api.superhero.controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.api.superhero.advise.TrackExecutionTime;
 import com.api.superhero.documentation.SuperheroResources;
 import com.api.superhero.model.Superhero;
 import com.api.superhero.model.SuperheroId;
+import com.api.superhero.model.SuperheroUpdate;
 import com.api.superhero.service.SuperheroService;
 
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class SuperheroController implements SuperheroResources {
+    
     
     private SuperheroService superheroService;
     
@@ -39,8 +42,8 @@ public class SuperheroController implements SuperheroResources {
     }
 
     @PatchMapping("/superheroes/{superheroId}")
-    public Superhero update(@RequestBody @Valid Superhero superhero, @PathVariable("superheroId") SuperheroId superheroId) {
-        return superheroService.update(superhero);
+    public Superhero update(@RequestBody @Valid SuperheroUpdate superhero, @PathVariable("superheroId") SuperheroId superheroId) {
+        return superheroService.update(superhero, superheroId);
     }
 
     @DeleteMapping("/superheroes/{superheroId}")

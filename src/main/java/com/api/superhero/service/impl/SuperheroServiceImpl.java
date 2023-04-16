@@ -15,6 +15,7 @@ import com.api.superhero.domain.SuperheroDAO;
 import com.api.superhero.exception.SuperheroException;
 import com.api.superhero.model.Superhero;
 import com.api.superhero.model.SuperheroId;
+import com.api.superhero.model.SuperheroUpdate;
 import com.api.superhero.repositories.SuperheroRepository;
 import com.api.superhero.service.SuperheroService;
 
@@ -24,7 +25,7 @@ public class SuperheroServiceImpl implements SuperheroService {
     private static final String TEMPLATE_SUPERHERO_NOT_FOUND = "Superhero with id: %s not found.";
 
     private static final String TEMPLATE_SUPERHERO_NAME_EXISTS = "Superhero with name: %s already exists.";
-
+    
     private SuperheroRepository superheroRepository;
 
     @Autowired
@@ -52,8 +53,25 @@ public class SuperheroServiceImpl implements SuperheroService {
     }
 
     @Override
-    public Superhero update(Superhero superhero) throws SuperheroException {
-        return null;
+    public Superhero update(SuperheroUpdate superhero, SuperheroId superheroId) throws SuperheroException {
+        SuperheroDAO superheroDao = this.findSuperheroById(superheroId.id());
+        
+        try {
+            superheroDao.setName(superhero.name());
+            superheroDao.setSuperPowers(superhero.superPowers());
+            
+            superheroRepository.save(superheroDao);
+            
+            return maptoSuperhero(superheroDao);
+        } catch (Exception e) {
+            if (e.getCause() != null
+                    && e.getCause().getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
+                throw new SuperheroException(e, TEMPLATE_SUPERHERO_NAME_EXISTS.formatted(superhero.name()),
+                        BAD_REQUEST);
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override

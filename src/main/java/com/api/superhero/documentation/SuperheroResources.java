@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.api.superhero.model.Superhero;
 import com.api.superhero.model.SuperheroId;
+import com.api.superhero.model.SuperheroUpdate;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +20,7 @@ public interface SuperheroResources {
 
     @Operation(summary = "Update a superhero by id.")
     public Superhero update(@Parameter(name = "Superhero",
-            description = "Superhero data to be updated.") Superhero superhero,
+            description = "Superhero data to be updated.") SuperheroUpdate superhero,
             @Parameter(name = "superheroId", in = ParameterIn.PATH,
                     description = "Id of the superheroe.") SuperheroId superheroId);
 
@@ -35,7 +36,7 @@ public interface SuperheroResources {
     public List<Superhero> getAllSuperheroes();
 
     @Operation(summary = "Returns all superheroes that contain the word passed by path parameter.")
-    public List<Superhero> getAllSuperheroesContainingWord(@Parameter(name = "byWord", in = ParameterIn.PATH,
+    public List<Superhero> getAllSuperheroesContainingWord(@Parameter(name = "byWord", in = ParameterIn.QUERY,
             description = "A word that is used as a filter, to retrieve all superheroes that contain that word.") String word);
 
 }
